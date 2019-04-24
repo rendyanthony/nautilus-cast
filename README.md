@@ -31,4 +31,4 @@ Last but not least, restart Nautilus.
 1. Select Cast Media. 
 
 ## Special Thanks
-Thanks to [@Rafostar] the wonderful [Cast to TV](https://github.com/Rafostar/gnome-shell-extension-cast-to-tv/) Gnome Shell extension.
+Thanks to [@Rafostar](https://github.com/Rafostar) the wonderful [Cast to TV](https://github.com/Rafostar/gnome-shell-extension-cast-to-tv/) Gnome Shell extension.

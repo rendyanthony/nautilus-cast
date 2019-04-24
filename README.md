@@ -1,5 +1,5 @@
 # nautilus-cast
-Cast video, music and pictures straight to your Chromecast from the comfort of your file manager. This Nautilus extension will add a Cast Media button to supported files in Nautilus.
+Cast video, music and pictures straight to your Chromecast from the comfort of your file manager. This Nautilus extension will add a Cast Media menu item to supported files in Nautilus.
 
 # Requirements
 * [gnome-shell-extension-cast-to-tv](https://github.com/Rafostar/gnome-shell-extension-cast-to-tv/)

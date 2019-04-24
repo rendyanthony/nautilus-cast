@@ -1,7 +1,7 @@
-# Cast Media Nautilus extension
-# Requires the gnome shell extension Cast to TV
+# https://github.com/rendyanthony/nautilus-cast/
 #
-# Rendy Anthony <rendy.anthony@gmail.com>
+# Cast Media Nautilus extension
+# Requires the Cast to TV Gnome Shell extension
 
 import json
 import os

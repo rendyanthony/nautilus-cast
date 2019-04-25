@@ -10,7 +10,7 @@ Cast video, music and pictures straight to your Chromecast from the comfort of y
 After you install all the above dependencies:
 ```
 curl https://raw.githubusercontent.com/rendyanthony/nautilus-cast/master/cast.py \
---create-dirs -o ~/.local/share/nautilus-python/extensions/cast.py
+  --create-dirs -o ~/.local/share/nautilus-python/extensions/cast.py
 ```
 
 Last but not least, restart Nautilus:

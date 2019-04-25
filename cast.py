@@ -55,16 +55,26 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
         else:
             return  #  Unable to determine the stream type
 
+        file_path = unquote(selected_file.get_uri()[7:])
+
+        playlist = [
+            file_path
+        ]
+
+        # Playlist must be updated before selection file
+        with open("/tmp/.cast-to-tv/playlist.json", "w") as fp:
+            json.dump(playlist, fp, indent=1)
+
         selection = {
             "streamType": stream_type,
             "subsPath": "",
-            "filePath": unquote(selected_file.get_uri()[7:])
+            "filePath": file_path
         }
 
         # The json file is monitored by the gnome-shell-extension
         # Whenever the file is touched, it will trigger a new cast session
         with open("/tmp/.cast-to-tv/selection.json", "w") as fp:
-            json.dump(selection, fp, indent=4)
+            json.dump(selection, fp, indent=1)
 
     def menu_activate_cb(self, menu, selected_file):
         self._cast_file(selected_file)
@@ -74,6 +84,13 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
             return
 
         selected_file = files[0]
+
+        # Do not display menu if no temp files
+        is_temp_access = (os.path.isfile("/tmp/.cast-to-tv/playlist.json") and
+            os.path.isfile("/tmp/.cast-to-tv/selection.json"))
+
+        if not is_temp_access:
+            return None
 
         # Only display the menu for supported media
         is_castable_media = (selected_file.is_mime_type('audio/*') or

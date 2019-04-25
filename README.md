@@ -13,7 +13,14 @@ curl https://raw.githubusercontent.com/rendyanthony/nautilus-cast/master/cast.py
 --create-dirs -o ~/.local/share/nautilus-python/extensions/cast.py
 ```
 
-Last but not least, restart Nautilus (`nautilus -q` or `killall nautilus`).
+Last but not least, restart Nautilus:
+```
+nautilus -q
+```
+or:
+```
+killall nautilus
+```
 
 ## How to use
 1. Right click on a video, music or picture file in Nautilus.

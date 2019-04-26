@@ -52,6 +52,10 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
 
         return False
 
+    def _start_server(self):
+        server = os.path.join(EXTENSION_PATH, "node_scripts/server")
+        subprocess.Popen(['/usr/bin/node', server])
+
     def _is_castable_media(self, file_obj):
         if file_obj.get_uri_scheme() != 'file':
             # Support for files under recent:// scheme
@@ -72,10 +76,6 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
             return "MUSIC"
         elif file_obj.is_mime_type('image/*'):
             return "PICTURE"
-
-    def _start_server(self):
-        server = os.path.join(EXTENSION_PATH, "node_scripts/server")
-        subprocess.Popen(['/usr/bin/node', server])
 
     def _cast_files(self, selected_files):
         stream_type = self._get_stream_type(selected_files[0])

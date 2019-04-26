@@ -1,5 +1,5 @@
 # https://github.com/rendyanthony/nautilus-cast/
-#
+#   
 # Cast Media Nautilus extension
 # Requires the Cast to TV Gnome Shell extension
 
@@ -15,7 +15,7 @@ except ImportError:
 
 import gi
 gi.require_version('GConf', '2.0')
-from gi.repository import Nautilus, GObject, GConf
+from gi.repository import Nautilus, Gio, GObject, GConf
 
 
 # Name of the gnome-shell extension
@@ -31,6 +31,18 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
     def __init__(self):
         self.client = GConf.Client.get_default()
 
+    def _get_chromecast_name(self):
+        with open("/tmp/.cast-to-tv/config.json") as fp:
+            config = json.load(fp)
+
+            if config['receiverType'] != 'chromecast' or not config['chromecastName']:
+                return
+
+            with open(os.path.join(EXTENSION_PATH, 'devices.json')) as fp:
+                for device in json.load(fp):
+                    if device['name'] == config['chromecastName']:
+                        return device['friendlyName']
+
     def _is_server_running(self):
         proc = subprocess.Popen(['pgrep', '-a', 'node'], stdout=subprocess.PIPE)
 
@@ -42,7 +54,9 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
 
     def _is_castable_media(self, file_obj):
         if file_obj.get_uri_scheme() != 'file':
-            return False
+            # Support for files under recent:// scheme
+            if not file_obj.get_activation_uri().startswith('file://'):
+                return False
 
         if file_obj.get_mime_type() in UNSUPPORTED_TYPE:
             return False
@@ -67,7 +81,7 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
         stream_type = self._get_stream_type(selected_files[0])
 
         # Make sure the playlist only contains the same media type
-        playlist = [unquote(file_obj.get_uri()[7:])
+        playlist = [unquote(file_obj.get_activation_uri()[7:])
                     for file_obj in selected_files
                     if self._get_stream_type(file_obj) == stream_type]
 
@@ -91,7 +105,8 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
 
     def get_file_items(self, window, files):
         # Do not display menu if no temp files
-        is_temp_access = (os.path.isfile("/tmp/.cast-to-tv/playlist.json") and
+        is_temp_access = (os.path.isfile("/tmp/.cast-to-tv/config.json") and
+            os.path.isfile("/tmp/.cast-to-tv/playlist.json") and
             os.path.isfile("/tmp/.cast-to-tv/selection.json"))
 
         if not is_temp_access:
@@ -106,9 +121,15 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
         if not self._is_server_running():
             self._start_server()
 
+        chromecast_name = self._get_chromecast_name()
+        if chromecast_name:
+            label = "Cast to {}".format(chromecast_name)
+        else:
+            label = "Cast Media"
+
         item = Nautilus.MenuItem(
             name='NautilusPython::cast_file_item',
-            label='Cast Media')
+            label=label)
         item.connect('activate', self.menu_activate_cb, selected_files)
 
         return item,

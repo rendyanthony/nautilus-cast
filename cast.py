@@ -38,7 +38,11 @@ class CastExtension(Nautilus.MenuProvider, GObject.GObject):
             if config['receiverType'] != 'chromecast' or not config['chromecastName']:
                 return
 
-            with open(os.path.join(EXTENSION_PATH, 'devices.json')) as fp:
+            devices_fn = os.path.join(EXTENSION_PATH, 'config', 'devices.json')
+            if not os.path.exists(devices_fn):
+                devices_fn = os.path.join(EXTENSION_PATH, 'devices.json')
+
+            with open(devices_fn) as fp:
                 for device in json.load(fp):
                     if device['name'] == config['chromecastName']:
                         return device['friendlyName']

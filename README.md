@@ -24,7 +24,7 @@ killall nautilus
 
 ## How to use
 1. Right click on a video, music or picture file in Nautilus.
-1. Select Cast Media. 
+1. Select "Cast to (Chromecast Name)" or "Cast Media".
 
 ## Special Thanks
 Thanks to [@Rafostar](https://github.com/Rafostar) for the wonderful [Cast to TV](https://github.com/Rafostar/gnome-shell-extension-cast-to-tv/) Gnome Shell extension.
